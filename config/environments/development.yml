@@ -1,0 +1,36 @@
+secret_key_base: CnYr2aBzltQm4yCaCIm8rYVgWOVnCPu2Y2wkPoJOtN8
+port: 4000
+name: crystal-bb
+
+logging:
+  severity: debug
+  colorize: true
+  filter:
+    - password
+    - confirm_password
+  context:
+    - request
+    - session
+    - headers
+    - cookies
+    - params
+
+host: 0.0.0.0
+port_reuse: true
+process_count: 1
+# ssl_key_file:
+# ssl_cert_file:
+redis_url: "redis://localhost:6379"
+database_url: postgres://admin:password@localhost:5432/crystal_bb_development
+auto_reload: true
+
+session:
+  key: amber.session
+  store: signed_cookie
+  expires: 0
+
+smtp:
+  enabled: false
+
+secrets:
+  description: Store your development secrets credentials and settings here.

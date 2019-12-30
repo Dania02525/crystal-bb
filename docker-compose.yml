@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+  app:
+    build: .
+    image: crystal-bb
+    command: amber watch
+    environment:
+      DATABASE_URL: postgres://admin:password@db:5432/crystal_bb_development
+    ports:
+      - 4000:4000
+    links:
+      - db
+    volumes:
+    - .:/app
+    - nodes:/app/node_modules
+    - shards:/app/lib
+
+  migrate:
+    build: .
+    image: crystal-bb
+    command: bash -c 'while ! nc -q 1 db 5432 </dev/null; do sleep 1; done && amber db migrate seed'
+    environment:
+      DATABASE_URL: postgres://admin:password@db:5432/crystal_bb_development
+    volumes:
+      - .:/app
+    links:
+      - db
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: crystal_bb_development
+    volumes:
+      - db:/var/lib/postgres/data
+    ports:
+      - 5432:5432
+
+volumes:
+  db:
+  nodes:
+  shards:
